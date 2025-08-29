@@ -1,0 +1,22 @@
+name: Publish Clojure Binding to Clojars
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Clojure
+        uses: DeLaGuardo/setup-clojure@v1
+        with:
+          lein: latest
+      - name: Build and publish
+        run: |
+          cd Bibliotecas/bindings/clojure
+          lein deploy clojars
+        env:
+          CLOJARS_USERNAME: ${{ secrets.CLOJARS_USERNAME }}
+          CLOJARS_PASSWORD: ${{ secrets.CLOJARS_PASSWORD }}

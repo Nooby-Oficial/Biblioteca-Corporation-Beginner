@@ -1,0 +1,22 @@
+name: Publish PHP Binding to Packagist
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+      - name: Publish to Packagist
+        run: |
+          cd Bibliotecas/bindings/php
+          composer install
+          composer publish
+        env:
+          COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}

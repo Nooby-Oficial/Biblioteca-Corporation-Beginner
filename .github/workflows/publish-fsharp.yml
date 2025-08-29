@@ -1,0 +1,22 @@
+name: Publish F# Binding to NuGet
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-and-publish:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.x'
+      - name: Build NuGet package
+        run: |
+          cd Bibliotecas/bindings/fsharp
+          dotnet pack -c Release
+      - name: Publish to NuGet
+        run: |
+          dotnet nuget push **/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json

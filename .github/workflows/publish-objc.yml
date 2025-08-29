@@ -1,0 +1,20 @@
+name: Publish Objective-C Binding to CocoaPods
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-and-publish:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Ruby and CocoaPods
+        run: |
+          sudo gem install cocoapods
+      - name: Publish to CocoaPods
+        run: |
+          cd Bibliotecas/bindings/objc
+          pod trunk push biblioteca.podspec --allow-warnings
+        env:
+          COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}

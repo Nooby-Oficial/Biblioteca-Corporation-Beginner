@@ -1,0 +1,20 @@
+name: Publish D Binding to Dub
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up D
+        uses: dlang-community/setup-dlang@v1
+        with:
+          compiler: dmd-latest
+      - name: Build and publish
+        run: |
+          cd Bibliotecas/bindings/d
+          dub build
+          dub publish --token ${{ secrets.DUB_TOKEN }}

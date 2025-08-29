@@ -1,0 +1,21 @@
+name: Publish Perl Binding to CPAN
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Perl
+        run: |
+          sudo apt-get update && sudo apt-get install -y perl cpanminus
+      - name: Publish to CPAN
+        run: |
+          cd Bibliotecas/bindings/perl
+          perl Makefile.PL
+          make
+          make test
+          cpan-upload -u ${{ secrets.CPAN_USER }} -p ${{ secrets.CPAN_PASS }} Biblioteca-*.tar.gz

@@ -1,0 +1,19 @@
+name: Publish Lua Binding to LuaRocks
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Lua
+        run: |
+          sudo apt-get update && sudo apt-get install -y luarocks
+      - name: Build and publish rock
+        run: |
+          cd Bibliotecas/bindings/lua
+          luarocks make
+          luarocks upload biblioteca-*.rockspec --api-key ${{ secrets.LUAROCKS_API_KEY }}

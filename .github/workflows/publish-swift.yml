@@ -1,0 +1,20 @@
+name: Publish Swift Binding to Swift Package Index
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-and-publish:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Swift
+        run: |
+          swift --version
+      - name: Publish to Swift Package Index
+        run: |
+          cd Bibliotecas/bindings/swift
+          swift package generate-xcodeproj
+          swift build
+          # Publicação depende do registro no Swift Package Index
